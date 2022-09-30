@@ -11,3 +11,5 @@ class Pet {
     this.age = age;
   }
 }
+
+module.exports = Pet;

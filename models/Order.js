@@ -9,3 +9,5 @@ class Order {
     this.price = price;
   }
 }
+
+module.exports = Order

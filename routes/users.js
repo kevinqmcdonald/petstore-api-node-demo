@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../models/User')
 
 const DEFAULT_USER = new User(1, 'test');
 const users = [

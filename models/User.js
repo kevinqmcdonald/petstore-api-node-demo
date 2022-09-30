@@ -7,3 +7,5 @@ class User {
     this.username = username;
   }
 }
+
+module.exports = User

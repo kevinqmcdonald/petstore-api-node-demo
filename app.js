@@ -5,8 +5,8 @@ const ordersRouter = require('./routes/orders');
 
 const app = express();
 app.use(express.json());
-app.use('/users', usersRouter);
-app.use('/pets', petsRouter);
-app.use('/orders', ordersRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/pets', petsRouter);
+app.use('/api/orders', ordersRouter);
 
 module.exports = app;
