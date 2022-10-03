@@ -1,6 +1,6 @@
 const express = require('express');
 
-const basicAuth = require('./server/auth').basicAuth;
+const basicAuth = require('./server/auth');
 const usersRouter = require('./routes/admin/users');
 const petsRouter = require('./routes/pets');
 const petsAdminRouter = require('./routes/admin/petsAdmin');

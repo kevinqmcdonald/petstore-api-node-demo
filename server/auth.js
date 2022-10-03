@@ -33,7 +33,4 @@ const basicAuth = (request, response, next) => {
   return response.status(401).send('Incorrect credentials provided');
 };
 
-module.exports = {
-  basicAuth: basicAuth,
-  USERS: USERS
-};
+module.exports = basicAuth;
