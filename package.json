@@ -6,8 +6,10 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "basic-auth": "^2.0.1",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "joi": "^17.6.2"
+    "joi": "^17.6.2",
+    "tsscmp": "^1.0.6"
   }
 }

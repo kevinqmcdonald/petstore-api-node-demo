@@ -1,7 +1,7 @@
-openapi: '3.0.0'
+openapi: "3.0.0"
 info:
-  version: '1.0'
-  title: 'PetStore'
+  version: "1.0"
+  title: "PetStore"
   description: Browse and buy different pets
 
 servers:
@@ -9,7 +9,7 @@ servers:
     description: Local development server
 
 paths:
-  /users/{id}:
+  /admin/users/{id}:
     get:
       summary: Get User
       description: Gets the user with the given ID
@@ -19,19 +19,25 @@ paths:
           description: "ID of the user to fetch"
           required: true
           schema:
-            $ref: '#/components/schemas/Id'
+            $ref: "#/components/schemas/Id"
       responses:
         "200":
           description: "User found"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
               example:
                 id: 1
                 username: test
+                password: test
+                role: default
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
         "404":
-          $ref: '#/components/responses/NotFound'
+          $ref: "#/components/responses/NotFound"
         "500":
           description: "Unexpected error"
   /pets:
@@ -44,10 +50,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PetCollection'
+                $ref: "#/components/schemas/PetCollection"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
         "500":
           description: "Unexpected error"
-  /pets/{id}:
+  /admin/pets/{id}:
     put:
       summary: Update Pet
       description: Updates a single pet
@@ -57,16 +65,16 @@ paths:
           description: "ID of the pet to update"
           required: true
           schema:
-            $ref: '#/components/schemas/Id'
+            $ref: "#/components/schemas/Id"
       requestBody:
         description: Updated pet details
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Pet'
+              $ref: "#/components/schemas/Pet"
             example:
-              name: 'Rover'
+              name: "Rover"
               species: Dog
               age: 2
       responses:
@@ -75,11 +83,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Pet'
+                $ref: "#/components/schemas/Pet"
         "400":
-          $ref: '#/components/responses/RequestBodyError'
+          $ref: "#/components/responses/RequestBodyError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
+        "403":
+          $ref: "#/components/responses/Unauthorized"
         "404":
-          $ref: '#/components/responses/NotFound'
+          $ref: "#/components/responses/NotFound"
         "500":
           description: "Unexpected error"
   /orders:
@@ -92,7 +104,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Order'
+              $ref: "#/components/schemas/Order"
             example:
               petId: 1
               price: 19.99
@@ -102,31 +114,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: "#/components/schemas/Order"
         "400":
-          $ref: '#/components/responses/RequestBodyError'
-        "500":
-          description: "Unexpected error"
-  /orders/{id}:
-    get:
-      summary: Get Order
-      description: "Gets the order with the given ID"
-      parameters:
-        - name: "id"
-          in: "path"
-          description: "ID of the order to fetch"
-          required: true
-          schema:
-            $ref: '#/components/schemas/Id'
-      responses:
-        "200":
-          description: "Order found"
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Order'
-        "404":
-          $ref: '#/components/responses/NotFound'
+          $ref: "#/components/responses/RequestBodyError"
+        "401":
+          $ref: "#/components/responses/Unauthenticated"
         "500":
           description: "Unexpected error"
 
@@ -141,6 +133,8 @@ components:
       description: A user model
       required:
         - username
+        - password
+        - role
       properties:
         id:
           type: integer
@@ -149,9 +143,15 @@ components:
           readOnly: true
         username:
           type: string
+        password:
+          type: string
+        role:
+          type: string
       example:
         id: 1
         username: testUser
+        password: testPassword
+        role: default
     Pet:
       type: object
       description: A pet model
@@ -182,7 +182,7 @@ components:
       type: array
       description: A collection of Pets
       items:
-        $ref: '#/components/schemas/Pet'
+        $ref: "#/components/schemas/Pet"
       example:
         - id: 1
           name: Rover
@@ -251,18 +251,30 @@ components:
       description: Error message
       example: The user with given ID was not found
   responses:
+    Unauthenticated:
+      description: Credentials are missing or invalid
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+    Unauthorized:
+      description: User does not have permission to access resource
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
     NotFound:
       description: "Resource not found"
       content:
         text/plain:
           schema:
-            $ref: '#/components/schemas/ErrorMessage'
+            $ref: "#/components/schemas/ErrorMessage"
     RequestBodyError:
       description: "Error with request body"
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: "#/components/schemas/Error"
   securitySchemes:
     basic:
       type: http

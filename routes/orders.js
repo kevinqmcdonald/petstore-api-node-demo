@@ -5,16 +5,6 @@ const Order = require("../models/Order");
 
 const orders = [];
 
-/* GET single order */
-router.get('/:id', (req, res) => {
-  const order = orders.find(o => o.id === parseInt(req.params.id));
-  if (!order) {
-    res.status(404).send('The order with the given ID was not found');
-  }
-
-  res.send(order);
-});
-
 /* POST new order */
 router.post('/', (req, res) => {
   // Validate request body
@@ -24,7 +14,7 @@ router.post('/', (req, res) => {
   });
   const result = schema.validate(req.body);
   if (result.error) {
-    res.status(400).send(result.error);
+    return res.status(400).send(result.error);
   }
 
   const order = new Order(orders.length + 1, req.body.petId, req.body.price);
