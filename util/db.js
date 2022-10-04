@@ -1,3 +1,8 @@
+/*
+A naive database that is hard-coded. In a production environment,
+we would use connector libraries to communicate with an actual database.
+ */
+
 const User = require("../models/User");
 const Pet = require("../models/Pet");
 
